@@ -1,21 +1,12 @@
 import express from "express";
-
-let articleInfo = [
-  {
-    name: "learn-react",
-    upvotes: 0,
-    comments: [],
-  },
-  {
-    name: "learn-node",
-    upvotes: 0,
-    comments: [],
-  },
-];
+import { connectDb } from "../db/db.js";
+import client from "../db/db.js";
 
 const app = express();
 
 app.use(express.json());
+
+connectDb();
 
 //test
 // app.get('/hello', (req, res) => {
@@ -31,30 +22,51 @@ app.listen(3000, () => {
   console.log("Example app listening on port 3000!");
 });
 
-app.post("/api/articles/:name/comments", (req, res) => {
+app.get("/api/articles/:name", async (req, res) => {
+  const { name } = req.params;
+
+  const db = client.db("test");
+  const article = await db.collection("mern").findOne({ name });
+
+  article
+    ? res.status(200).json(article)
+    : res.status(404).json({ message: "Article not found" });
+});
+
+app.post("/api/articles/:name/comments", async (req, res) => {
   const { name } = req.params;
   const { username, text } = req.body;
-  const article = articleInfo.find((article) => article.name === name);
+
+  const db = client.db("test");
+  await db
+    .collection("mern")
+    .updateOne({ name }, { $push: { comments: { username, text } } });
+
+  const article = await db.collection("mern").findOne({ name });
 
   article
-    ? (article.comments.push({ username, text }),
-      res.send(`${name} now has ${article.comments.length} comments`))
+    ? res.send(`${name} now has ${article.comments.length} comments`)
     : res.send("No article found");
 });
 
-app.put("/api/articles/:name/upvote", (req, res) => {
+app.put("/api/articles/:name/upvote", async (req, res) => {
   const { name } = req.params;
-  const article = articleInfo.find((article) => article.name === name);
+  const db = client.db("test");
+  await db.collection("mern").updateOne({ name }, { $inc: { upvotes: 1 } });
+
+  const article = await db.collection("mern").findOne({ name });
 
   article
-    ? ((article.upvotes += 1),
-      res.send(`${name} now has ${article.upvotes} upvotes`))
-    : res.send("No article found");
+    ? res.status(200).json(article.upvotes)
+    : res.status(404).json({ message: "Article not found" });
 });
 
-app.get("/api/articles/:name", (req, res) => {
+app.get("/api/articles/:name", async (req, res) => {
   const { name } = req.params;
-  const article = articleInfo.find((article) => article.name === name);
+  const db = client.db("test");
+  await db.collection("mern").findOne({ name });
 
-  article ? res.send(article) : res.send("No article found");
+  article
+    ? res.status(200).json(article)
+    : res.status(404).json({ message: "Article not found" });
 });

@@ -8,32 +8,13 @@ const client = new MongoClient(process.env.MONGODB_URI, {
     useUnifiedTopology: true,
 });
 
-const connectDb = async () => {
+export const connectDb = async () => {
     try {
         await client.connect();
         console.log("Connected to database");
-
-        const database = client.db("test")
-        const collection = database.collection("mern")
-
-        collection.insertMany([
-            {
-              name: "learn-react",
-              upvotes: 0,
-              comments: [],
-            },
-            {
-              name: "learn-node",
-              upvotes: 0,
-              comments: [],
-            },
-          ])
-
-          console.log("Inserted documents")
-
     } catch (error) {
         console.error(error);
     }
 };
 
-connectDb();
+export default client;
