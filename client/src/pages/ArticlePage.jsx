@@ -1,8 +1,18 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import { useParams } from 'react-router-dom'
 import articles from './article-content'
+import axios from 'axios'
 
 const ArticlePage = () => {
+  const [articleInfo, setArticleInfo] = useState({ upvotes: 0, comments: [] })
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await axios.get(`/api/articles/${name}`)
+      setArticleInfo(result.data)
+    }
+    fetchData()
+  }, [])
 
   const { articleId } = useParams()
   const article = articles.find(article => article.name === articleId)

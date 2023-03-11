@@ -1,8 +1,11 @@
 import express from "express";
 import { connectDb } from "../db/db.js";
 import client from "../db/db.js";
+import cors from "cors";
 
 const app = express();
+
+app.use(cors());
 
 app.use(express.json());
 
@@ -69,4 +72,14 @@ app.get("/api/articles/:name", async (req, res) => {
   article
     ? res.status(200).json(article)
     : res.status(404).json({ message: "Article not found" });
+});
+
+app.get("/api/articles", async (req, res) => {
+  const db = client.db("test");
+  const articles = await db.collection("mern").find({}).toArray();
+
+  articles
+  ? res.status(200).json(articles)
+  : res.status(404).json({ message: "Articles not found" });
+
 });
