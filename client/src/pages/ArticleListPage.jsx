@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import articles from "./article-content";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
@@ -17,15 +16,21 @@ const ArticleListPage = () => {
 
   return (
     <>
-      {/* <h1>Articles</h1>
-      {articles.map((article) => (
-        <div key={article.name}>
-          <Link to={`/articles/${article.name}`}>
-            <h3>{article.title}</h3>
-          </Link>
-          <p>{article.content[0].substring(0, 100)}...</p>
-        </div>
-      ))} */}
+      <h1>Articles</h1>
+      {
+        articles
+        ? articles.map((article) => {
+          return (
+            <div key={article._id}>
+              <Link to={`/articles/${article.name}`}>
+                <h3>{article.name}</h3>
+              </Link>
+              <p>{article.content.substring(0, 150)}...</p>
+            </div>
+          )
+        })
+        : <p>No articles yet</p>
+      }
     </>
   );
 };
