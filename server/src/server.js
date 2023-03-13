@@ -48,7 +48,7 @@ app.post("/api/articles/:name/comments", async (req, res) => {
   const article = await db.collection("mern").findOne({ name });
 
   article
-    ? res.send(`${name} now has ${article.comments.length} comments`)
+    ? res.json(article)
     : res.send("No article found");
 });
 

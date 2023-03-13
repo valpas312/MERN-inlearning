@@ -7,6 +7,9 @@ import ArticleListPage from "../pages/ArticleListPage";
 import ArticlePage from "../pages/ArticlePage";
 import NotFoundPage from "../pages/NotFoundPage";
 
+import Login from '../pages/Login';
+import Register from '../pages/Register';
+
 function Router() {
   return (<>
     <BrowserRouter>
@@ -17,6 +20,8 @@ function Router() {
           <Route path="/articles" element={<ArticleListPage />} />
           <Route path="/articles/:articleId" element={<ArticlePage />} />
           <Route path="*" element={<NotFoundPage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
         </Routes>
       </BrowserRouter>
   </>
