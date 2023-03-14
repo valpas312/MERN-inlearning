@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import AddComments from "../components/AddComments";
-import useUser from "../hooks/useUser";
 
 const ArticlePage = () => {
   const [articleInfo, setArticleInfo] = useState();
@@ -11,7 +10,6 @@ const ArticlePage = () => {
 
   const { articleId } = useParams();
 
-  const { loading, user } = useUser();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -57,11 +55,8 @@ const ArticlePage = () => {
               </div>
             ))
           }
-          {
-            user 
+          <h3>Add a comment</h3>
             ? <AddComments articleName={articleId} articleUpdate={setArticleInfo} />
-            : <p>Log in to add comments</p>
-          }
         </>
       ) : (
         <p>No article found</p>

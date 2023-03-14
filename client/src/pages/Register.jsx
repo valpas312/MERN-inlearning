@@ -1,69 +1,59 @@
-import React, {useState} from "react";
-import {Link, useNavigate} from "react-router-dom";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import axios from "axios";
+import React, { useState, useEffect } from "react";
 
 const Register = () => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [idusuario, setIdusuario] = useState(Math.floor(Math.random() * 1000));
 
-    const [error, setError] = useState("");
+  function handleSubmit(e) {
+    e.preventDefault();
 
-    const navigate = useNavigate();
+    setIdusuario(Math.floor(Math.random() * 1000));
 
-    const auth = getAuth();
+    axios
+      .post("https://users-app-two.vercel.app/api/usuario/agregar", {
+        name,
+        email,
+        password,
+        idusuario,
+      })
+      .then(() => {
+        alert("Usuario agregado");
+      })
+      .catch((err) => {
+        alert("Error al agregar usuario");
+        console.log(err);
+      });
+  }
 
-    const register = (e) => {
-        e.preventDefault();
-
-        if (password !== confirmPassword) {
-            setError("Passwords do not match");
-            return;
-        }
-
-        createUserWithEmailAndPassword(auth, email, password)
-            .then(navigate("/"))
-            .catch((error) => {
-                setError(error.message);
-            });
-    };
-
-  return <>
-    <h1>Register</h1>
-
-    <form>
-        {error && <div>{error}</div>}
-        <label htmlFor="email">Email</label>
+  return (
+    <>
+      <h1>Register</h1>
+      <form>
         <input
-            type="email"
-            name="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+          type="text"
+          placeholder="Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
         />
-
-        <label htmlFor="password">Password</label>
         <input
-            type="password"
-            name="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
-
-        <label htmlFor="confirmPassword">Confirm Password</label>
         <input
-            type="password"
-            name="confirmPassword"
-            id="confirmPassword"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
         />
-
-        <button type="submit" onClick={{register}}>Register</button>
-        <Link to="/login">Login</Link>
-    </form>
-  </>;
+        <button onClick={handleSubmit}>Register</button>
+      </form>
+    </>
+  );
 };
 
 export default Register;

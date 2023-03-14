@@ -1,55 +1,59 @@
-import React, { useState } from "react";
-import {Link, useNavigate} from "react-router-dom";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import React, {useState, useEffect} from 'react'
+import axios from 'axios'
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
 
-    const navigate = useNavigate();
+  const [data, setData] = useState([])
 
-  const login = (e) => {
-    e.preventDefault();
+  useEffect(() => {
+    axios.get('https://users-app-two.vercel.app/api/usuario/lista')
+      .then(res => {
+        setData(res.data)
+      })
+  }, [])
 
-    const auth = getAuth();
-    signInWithEmailAndPassword(auth, email, password)
-      .then(navigate("/"))
-      .catch((error) => {
-        setError(error.message);
-      });
-  };
+  console.log(data)
 
-  return (
-    <>
-      <h1>Login</h1>
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
 
-      <form>
-        {error && <div>{error}</div>}
+  const [user, setUser] = useState(null)
 
-        <label htmlFor="email">Email</label>
-        <input
-          type="email"
-          name="email"
-          id="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+  const isEqual = (email, password) => {
+    return data.find(user => user.email === email && user.password === password)
+  }
 
-        <label htmlFor="password">Password</label>
-        <input
-          type="password"
-          name="password"
-          id="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+  const handleSubmit = (e) => {
+    e.preventDefault()
 
-        <button type="submit" onClick={login}>Login</button>
-        <Link to="/register">Register</Link>
-      </form>
-    </>
-  );
-};
+    const user = isEqual(email, password)
 
-export default Login;
+    if (user) {
+      setUser(user)
+      alert('Bienvenido')
+    } else {
+      alert('Usuario o contraseña incorrectos')
+    }
+  }
+
+  return <>
+    <h1>Login</h1>
+    <form>
+      <input
+        type="email"
+        placeholder="Email"
+        value={email}
+        onChange={e => setEmail(e.target.value)}
+      />
+      <input
+        type="password"
+        placeholder="Password"
+        value={password}
+        onChange={e => setPassword(e.target.value)}
+      />
+      <button onClick={handleSubmit}>Login</button>
+    </form>
+  </>
+}
+
+export default Login
