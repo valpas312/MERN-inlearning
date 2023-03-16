@@ -1,16 +1,18 @@
-import React, { useState, useEffect} from "react";
-import { useParams } from "react-router-dom";
+import React, { useState, useEffect, useContext} from "react";
+import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 import AddComments from "../components/AddComments";
+import { UserContext } from "../App";
 
 const ArticlePage = () => {
+
+  const [user, setUser] = useContext(UserContext);
 
   const [articleInfo, setArticleInfo] = useState();
 
   const [upvotes, setUpvotes] = useState();
 
   const { articleId } = useParams();
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,10 +39,14 @@ const ArticlePage = () => {
       {articleInfo ? (
         <>
           <h1>{articleInfo.name}</h1>
-          <div>
+          {
+            Object.keys(user).length > 0
+          ? <div>
             <p>{upvotes}</p>
-              <button onClick={upvoteArticle}>Upvote</button>
-          </div>
+               <button onClick={upvoteArticle}>Upvote</button>
+           </div>
+          : <Link to="/login">Log in to upvote</Link>
+          }
           <p>{articleInfo.content}</p>
           <h3>Comments</h3>
           {
@@ -51,7 +57,11 @@ const ArticlePage = () => {
               </div>
             ))
           }
-            <AddComments articleName={articleId} articleUpdate={setArticleInfo} />
+          {
+            Object.keys(user).length > 0
+            ? <AddComments articleName={articleId} articleUpdate={setArticleInfo} />
+            : <Link to="/login">Log in to add comments</Link>
+          }
         </>
       ) : (
         <p>No article found</p>

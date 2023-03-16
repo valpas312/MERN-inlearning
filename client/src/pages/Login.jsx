@@ -1,11 +1,11 @@
 import React, {useState, useEffect, useContext} from 'react'
 import axios from 'axios'
 import { UserContext } from '../App'
-import { Navigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
 
-  const navigate = Navigate()
+  const navigate = useNavigate()
 
   const [user, setUser] = useContext(UserContext)
 
@@ -16,6 +16,7 @@ const Login = () => {
     axios.get('https://users-app-two.vercel.app/api/usuario/lista')
     .then(res => {
       setData(res.data)
+      console.log(res.data)
     })
   }, [])
     
@@ -39,8 +40,6 @@ const Login = () => {
     } else {
       alert('Usuario o contraseña incorrectos')
     }
-
-    console.log(user)
   }
 
   return <>

@@ -1,8 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import axios from "axios";
+import { UserContext } from "../App";
 
 const AddComments = ({articleName, articleUpdate}) => {
-  const [name, setName] = useState("");
+
+  const [user, setUser] = useContext(UserContext);
+
+  const [name, setName] = useState(user.name);
   const [comment, setComment] = useState("");
 
   const handleSubmit = async (e) => {
@@ -20,14 +24,8 @@ const AddComments = ({articleName, articleUpdate}) => {
     <>
       <h3>Add Comments</h3>
       <form onSubmit={e => e.preventDefault()}>
-        <label htmlFor="name">Name</label>
-        <input
-          type="text"
-          id="name"
-          name="name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
+        <span>Logged in as: {user.name}</span>
+        <hr />
         <label htmlFor="comment">Comment</label>
         <textarea
           id="comment"
