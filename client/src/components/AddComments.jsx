@@ -20,7 +20,7 @@ const AddComments = ({articleName, articleUpdate}) => {
     <>
       <h3>Add Comments</h3>
       <form onSubmit={e => e.preventDefault()}>
-        <label for="name">Name</label>
+        <label htmlFor="name">Name</label>
         <input
           type="text"
           id="name"
@@ -28,7 +28,7 @@ const AddComments = ({articleName, articleUpdate}) => {
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
-        <label for="comment">Comment</label>
+        <label htmlFor="comment">Comment</label>
         <textarea
           id="comment"
           name="comment"

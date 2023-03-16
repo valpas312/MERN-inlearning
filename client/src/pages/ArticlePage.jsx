@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect} from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import AddComments from "../components/AddComments";
 
 const ArticlePage = () => {
+
   const [articleInfo, setArticleInfo] = useState();
 
   const [upvotes, setUpvotes] = useState();
@@ -19,7 +20,6 @@ const ArticlePage = () => {
       setArticleInfo(result.data);
       setUpvotes(result.data.upvotes);
       console.log(result.data);
-      console.log(upvotes);
     };
     fetchData();
   }, []);
@@ -39,11 +39,7 @@ const ArticlePage = () => {
           <h1>{articleInfo.name}</h1>
           <div>
             <p>{upvotes}</p>
-            {user ? (
               <button onClick={upvoteArticle}>Upvote</button>
-            ) : (
-              <p>Log in to upvote</p>
-            )}
           </div>
           <p>{articleInfo.content}</p>
           <h3>Comments</h3>
@@ -55,8 +51,7 @@ const ArticlePage = () => {
               </div>
             ))
           }
-          <h3>Add a comment</h3>
-            ? <AddComments articleName={articleId} articleUpdate={setArticleInfo} />
+            <AddComments articleName={articleId} articleUpdate={setArticleInfo} />
         </>
       ) : (
         <p>No article found</p>

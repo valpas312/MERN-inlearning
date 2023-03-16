@@ -1,7 +1,13 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useContext} from 'react'
 import axios from 'axios'
+import { UserContext } from '../App'
+import { Navigate } from 'react-router-dom'
 
 const Login = () => {
+
+  const navigate = Navigate()
+
+  const [user, setUser] = useContext(UserContext)
 
   
   const [data, setData] = useState([])
@@ -12,13 +18,10 @@ const Login = () => {
       setData(res.data)
     })
   }, [])
-  
-  console.log(data)
-  
+    
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   
-  const [user, setUser] = useState(null)
   
   const isEqual = (email, password) => {
     return data.find(user => user.email === email && user.password === password)
@@ -32,9 +35,12 @@ const Login = () => {
     if (user) {
       setUser(user)
       alert('Bienvenido')
+      navigate('/articles')
     } else {
       alert('Usuario o contraseña incorrectos')
     }
+
+    console.log(user)
   }
 
   return <>
