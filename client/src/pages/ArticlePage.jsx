@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 import AddComments from "../components/AddComments";
 import { UserContext } from "../App";
+import { Card, CardHeader, CardBody, CardFooter, Box } from '@chakra-ui/react'
 
 const ArticlePage = () => {
 
@@ -35,38 +36,50 @@ const ArticlePage = () => {
   };
 
   return (
-    <>
+    <Box>
       {articleInfo ? (
-        <>
-          <h1>{articleInfo.name}</h1>
+        <Card>
+          <CardHeader textTransform="uppercase">{articleInfo.name}</CardHeader>
+          <CardBody>
           {
             Object.keys(user).length > 0
-          ? <div>
-            <p>{upvotes}</p>
+          ? <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+            gap="1rem"
+          >
+            <Text fontSize="sm">{upvotes}</Text>
                <button onClick={upvoteArticle}>Upvote</button>
-           </div>
+           </Box>
           : <Link to="/login">Log in to upvote</Link>
           }
           <p>{articleInfo.content}</p>
-          <h3>Comments</h3>
+          <Box>
+          <CardHeader>Comments</CardHeader>
           {
             articleInfo.comments.map((comment, key) => (
               <div key={key}>
                 <p>{comment.username}</p>
                 <p>{comment.text}</p>
+                <hr/>
               </div>
             ))
           }
+          <CardFooter>
           {
             Object.keys(user).length > 0
             ? <AddComments articleName={articleId} articleUpdate={setArticleInfo} />
-            : <Link to="/login">Log in to add comments</Link>
+            : <Link style={{fontSize: "2rem"}} to="/login">Log in to add comments</Link>
           }
-        </>
+          </CardFooter>
+          </Box>
+          </CardBody>
+        </Card>
       ) : (
         <p>No article found</p>
       )}
-    </>
+    </Box>
   );
 };
 

@@ -2,6 +2,14 @@ import React, {useState, useEffect, useContext} from 'react'
 import axios from 'axios'
 import { UserContext } from '../App'
 import { useNavigate } from 'react-router-dom'
+import {
+  FormControl,
+  FormLabel,
+  FormErrorMessage,
+  FormHelperText,
+  Input,
+  Button,
+} from '@chakra-ui/react'
 
 const Login = () => {
 
@@ -44,21 +52,31 @@ const Login = () => {
 
   return <>
     <h1>Login</h1>
-    <form>
-      <input
+    <FormControl
+    w="50%"
+    >
+      <Input
+        isRequired
         type="email"
         placeholder="Email"
         value={email}
         onChange={e => setEmail(e.target.value)}
+        bg="white"
       />
-      <input
+      <Input
+        bg="white"
+        isRequired
         type="password"
         placeholder="Password"
         value={password}
         onChange={e => setPassword(e.target.value)}
       />
-      <button onClick={handleSubmit}>Login</button>
-    </form>
+      <Button 
+      mt={4}
+      colorScheme='teal'
+      type='submit'
+      onClick={handleSubmit}>Login</Button>
+    </FormControl>
   </>
 }
 
