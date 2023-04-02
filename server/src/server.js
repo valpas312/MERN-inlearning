@@ -1,3 +1,4 @@
+//Servidor con sus rutas
 import express from "express";
 import { connectDb } from "../db/db.js";
 import client from "../db/db.js";
@@ -25,6 +26,7 @@ app.listen(3000, () => {
   console.log("Example app listening on port 3000!");
 });
 
+//Rutas
 app.get("/api/articles/:name", async (req, res) => {
   const { name } = req.params;
 
